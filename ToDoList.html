@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!-- saved from url=(0023)http://www.todolist.cn/ -->
+<html>
+	<head>	
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> 
+		<title>ZHM's ToDoList</title>
+		<link rel="stylesheet" type="text/css" href="ToDoList.css">
+	</head>
+	<body>
+		<header>
+			<section>
+				<div>
+				<!-- <form action="javascript:postaction()" id="form"> -->
+					<label>ToDoList</label>
+					<input type="text" id="todo" name="title" placeholder="添加ToDo" required="required" autocomplete="off"></div>
+				<!-- </form> -->
+			</section>
+		</header>
+		<section>
+			<ol id="list">
+			<li><input type="checkbox" class="check"><p class="event">sss</p><button class="destroy">X</button></li>
+			</ol>
+			<div>
+				<h2 id="count"></h2>
+				<button id='completed' class='selector'>Completed</button>
+				<button id='active' class='selector'>Active</button>
+				<button id='all' class='selector'>All</button>
+			</div>
+		</section>
+	</body>
+	<script type="text/javascript" src="model.js"></script>
+	<script type="text/javascript" src="ToDoMVC.js"></script>
+</html>
