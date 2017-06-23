@@ -35,6 +35,42 @@ window.onload=function(){
 		data.selector='uncompleted';
 		updateList();
 	}, false);
+
+	$('allPick').addEventListener('ontouchstart',function() {
+        $('allPick').style.borderColor = "green";
+    });
+
+    $('allPick').addEventListener('ontouchend',function() {
+       $('allPick').style.borderColor = "white";
+    });
+
+    $('allPick').addEventListener('click',function(){
+    	if(data.selector=='all'||data.selector=='uncompleted')
+    	{
+    		var isAllCompleted=true;
+    		for(var i=0;i<data.items.length;i++){
+				 if(!data.items[i].completed)
+				 {
+				 	isAllCompleted=false;
+				 	break;
+				 }
+			}
+    		data.items.forEach(function(item, index) {
+    			item.completed=!isAllCompleted;
+    		});
+    	}
+    	else//删除所有已完成
+    	{
+    		for(var i=0;i<data.items.length;)
+    		{
+    			if(data.items[i].completed)
+    				data.items.splice(i,1)
+    			else
+    				i++;
+    		}
+    	}
+    	updateList();
+    });
 	updateList();
 }
 
@@ -48,7 +84,28 @@ function updateList()
 		data.msg='';
 	}
 	model.flush();
-	//console.log(data);
+	console.log(data.selector);
+	if(data.selector=='all')
+	{
+		$('allPick').style.backgroundImage='url("v.png")'
+		$('all').style.backgroundColor='rgba(0,0,0,0.2)';
+		$('completed').style.backgroundColor='white';
+		$('active').style.backgroundColor='white';
+	}
+	if(data.selector=='completed')
+	{
+		$('allPick').style.backgroundImage='url("delete.png")'
+		$('all').style.backgroundColor='white';
+		$('completed').style.backgroundColor='rgba(0,0,0,0.2)';
+		$('active').style.backgroundColor='white';
+	}
+	if(data.selector=='uncompleted'){
+		$('allPick').style.backgroundImage='url("v.png")'
+		$('all').style.backgroundColor='white';
+		$('completed').style.backgroundColor='white';
+		$('active').style.backgroundColor='rgba(0,0,0,0.2)';
+	}
+
 	list.innerHTML='';
 	data.items.forEach(function(item, index) {
 		if(data.selector=='all'||(data.selector=='completed'&&item.completed)||(data.selector=='uncompleted'&&!item.completed)
