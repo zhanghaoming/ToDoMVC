@@ -13,8 +13,15 @@ header{
 
 section{
 	margin:0 auto;
-	width:600px;
 	padding:0 10px;
+}
+
+@media screen and (min-width: 620px){
+	section{
+		margin:0 auto;
+		padding:0 10px;
+		width: 600px;
+	}
 }
 
 label{
@@ -97,8 +104,6 @@ li{
 	margin-bottom: 10px;
 	padding:0 45px;
 	border-radius:3px;
-/*	border-left: 5px solid #629A9C;*/
-/*	box-shadow: 0 1px 2px rgba(0,0,0,0.07);*/
 }
 
 #count{
@@ -129,5 +134,13 @@ li{
 	text-align: center;
 	margin-left: 10px;
 	background-color: white;
+}
+
+.editInput{
+	position: absolute;
+	left:40px;
+	top:0;
+	width: 300px;
+	height: 28px;
 }
 

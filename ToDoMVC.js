@@ -2,9 +2,6 @@ function $(id){
 	return document.getElementById(id);
 }
 
-/*var add=document.getElementById('add_btn');
-add.addEventListener('click',addToDo,false);*/
-var data=window.model.data;
 var amountActive=0;
 
 const isCompleted='completed';
@@ -14,9 +11,9 @@ function updateListCount()
 	$('count').innerHTML=amountActive+" items left";
 }
 
-updateListCount();
-
 window.onload=function(){
+	model.init();
+	var data=window.model.data;
 	$('todo').addEventListener('keyup', function(event) {
 		if (event.keyCode != 0xd) return;
 		data.msg=$('todo').value;
@@ -43,23 +40,102 @@ window.onload=function(){
 
 function updateList()
 {
+	var data=window.model.data;
 	amountActive=0;
 	var list=$('list');
 	if(data.msg!=''){
 		data.items.push({msg: data.msg, completed: false});
 		data.msg='';
 	}
+	model.flush();
+	//console.log(data);
 	list.innerHTML='';
 	data.items.forEach(function(item, index) {
-		if(!item.completed)
-			amountActive++;
 		if(data.selector=='all'||(data.selector=='completed'&&item.completed)||(data.selector=='uncompleted'&&!item.completed)
 			){
+			amountActive++;
 			var node=document.createElement('div');
 			node.innerHTML='<li><input type="checkbox" class="check"><p class="event">'+item.msg+'</p><button class="destroy">X</button></li>';
-
 			node.classList.add('node');
+
 			list.insertBefore(node, list.childNodes[0]);
+
+			//绑定插入事件
+			var edit=node.querySelector('li');
+			edit.addEventListener('dblclick',function(){
+				var editInput=document.createElement('input');
+				var finished=false;
+
+				editInput.setAttribute('type', 'text');
+		        editInput.setAttribute('class', 'edit');
+		        editInput.setAttribute('value', item.msg);
+		        editInput.addEventListener('keyup',function(event){
+		        	if (event.keyCode != 0xd) return;
+		        	if(editInput.value!='')
+		        	{
+		        		item.msg=editInput.value;
+		        		if(!finished){
+		        			finished=true;
+		        			edit.removeChild(editInput);
+		        			console.log('edit');
+		        		}
+		        		updateList();
+		        	}
+		        })
+
+		        editInput.addEventListener('blur', function() {
+		        	if(finished) return;
+		        	finished=true;
+		        	edit.removeChild(editInput);
+		        	console.log("blur");
+		        });
+
+		        edit.appendChild(editInput);
+				editInput.classList.add('editInput');
+				editInput.focus();
+			});
+
+			//手机端双击事件
+			var countTouch = 0;
+			edit.addEventListener('touchstart',function(){
+				countTouch++;
+		        setTimeout(function () {
+		            countTouch = 0;
+		        }, 500);
+		        if (countTouch > 1) {
+		            countTouch = 0;
+				var editInput=document.createElement('input');
+				var finished=false;
+
+				editInput.setAttribute('type', 'text');
+		        editInput.setAttribute('class', 'edit');
+		        editInput.setAttribute('value', item.msg);
+		        editInput.addEventListener('keyup',function(event){
+		        	if (event.keyCode != 0xd) return;
+		        	if(editInput.value!='')
+		        	{
+		        		item.msg=editInput.value;
+		        		if(!finished){
+		        			finished=true;
+		        			edit.removeChild(editInput);
+		        			console.log('edit');
+		        		}
+		        		updateList();
+		        	}
+		        })
+
+		        editInput.addEventListener('blur', function() {
+		        	if(finished) return;
+		        	finished=true;
+		        	edit.removeChild(editInput);
+		        	console.log("blur");
+		        });
+
+		        edit.appendChild(editInput);
+				editInput.classList.add('editInput');
+				editInput.focus();
+		        }
+			});
 
 			var itemCheck = node.querySelector('.check');
 			itemCheck.checked = item.completed;
@@ -80,7 +156,6 @@ function updateList()
 		todo.value='';
 	},false);
 	updateListCount();
-
 }
 
 
